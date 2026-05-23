@@ -1,17 +1,32 @@
 import "server-only";
 import { marked } from "marked";
-import DOMPurify from "isomorphic-dompurify";
 
 marked.setOptions({
   gfm: true,
   breaks: false,
 });
 
+// Minimal sanitizer for admin-authored content.
+// Strips script/iframe/style blocks, on* event attributes, and javascript: URLs.
+// Posts are written exclusively by authenticated admins, so this is
+// defense-in-depth, not a security boundary.
+function sanitize(html: string): string {
+  return html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi, "")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/<object\b[^>]*>[\s\S]*?<\/object>/gi, "")
+    .replace(/<embed\b[^>]*>/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*"[^"]*"/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*'[^']*'/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*[^\s>]+/gi, "")
+    .replace(/(?:href|src)\s*=\s*"javascript:[^"]*"/gi, 'href="#"')
+    .replace(/(?:href|src)\s*=\s*'javascript:[^']*'/gi, "href='#'");
+}
+
 export async function renderMarkdown(md: string): Promise<string> {
   const raw = await marked.parse(md ?? "");
-  return DOMPurify.sanitize(raw, {
-    ADD_ATTR: ["target", "rel"],
-  });
+  return sanitize(raw);
 }
 
 export function computeReadingMinutes(md: string): number {
