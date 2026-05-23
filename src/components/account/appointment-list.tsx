@@ -221,7 +221,7 @@ function StatusPill({ status }: { status: CustomerAppointment["status"] }) {
   const t = useTranslations("Account.dashboard.status");
   const tone =
     {
-      PENDING: "bg-gold/15 text-gold-foreground",
+      PENDING: "bg-gold/15 text-gold-foreground dark:text-gold",
       CONFIRMED: "bg-primary/10 text-primary",
       COMPLETED: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
       CANCELLED: "bg-red-500/10 text-red-700 dark:text-red-400",

@@ -47,7 +47,7 @@ export function ReviewRow(initial: Props) {
                 "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
                 approved
                   ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-                  : "bg-gold/15 text-gold-foreground",
+                  : "bg-gold/15 text-gold-foreground dark:text-gold",
               )}
             >
               {approved ? "Approved" : "Pending"}
@@ -100,7 +100,7 @@ export function ReviewRow(initial: Props) {
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
               featured
-                ? "border-gold bg-gold/10 text-gold-foreground"
+                ? "border-gold bg-gold/10 text-gold-foreground dark:text-gold"
                 : "border-border hover:bg-accent",
               !approved && "cursor-not-allowed opacity-40",
             )}

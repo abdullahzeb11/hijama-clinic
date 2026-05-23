@@ -30,7 +30,7 @@ export function KpiCard({
           <div
             className={cn(
               "flex h-9 w-9 items-center justify-center rounded-lg",
-              tone === "gold" && "bg-gold/15 text-gold-foreground",
+              tone === "gold" && "bg-gold/15 text-gold-foreground dark:text-gold",
               tone === "primary" && "bg-primary/10 text-primary",
               tone === "default" && "bg-muted text-foreground/70",
             )}

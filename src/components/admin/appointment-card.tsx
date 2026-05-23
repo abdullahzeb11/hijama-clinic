@@ -37,7 +37,9 @@ export type AppointmentCardData = {
   guestName: string | null;
   guestPhone: string | null;
   addressLine: string | null;
-  serviceName: string;
+  serviceName: string;        // English (shown on card)
+  serviceNameAr: string;      // Arabic (used in Arabic WhatsApp message)
+  locale: "ar" | "en";        // Locale the customer booked in
 };
 
 export function AppointmentCard({ a }: { a: AppointmentCardData }) {
@@ -182,24 +184,34 @@ export function AppointmentCard({ a }: { a: AppointmentCardData }) {
   );
 }
 
-/** Build a wa.me link with the full confirmation message pre-filled. */
+/** Build a wa.me link with the full confirmation message pre-filled, in the
+ *  language the customer booked in. */
 function buildWhatsAppConfirmLink(a: AppointmentCardData): string {
   if (!a.guestPhone) return "#";
-  const date = new Intl.DateTimeFormat("en-SA", {
+
+  const localeTag = a.locale === "ar" ? "ar-SA" : "en-SA";
+  const when = new Date(a.scheduledAt);
+  const date = new Intl.DateTimeFormat(localeTag, {
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
     timeZone: "Asia/Riyadh",
-  }).format(new Date(a.scheduledAt));
-  const time = new Intl.DateTimeFormat("en-SA", {
+  }).format(when);
+  const time = new Intl.DateTimeFormat(localeTag, {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
     timeZone: "Asia/Riyadh",
-  }).format(new Date(a.scheduledAt));
+  }).format(when);
+  const ref = a.id.slice(-8).toUpperCase();
   const name = a.guestName ?? "";
-  const message = `As-salamu alaykum ${name},\n\nThis confirms your appointment at Al-Shifa Hijama Center:\n\n• Service: ${a.serviceName}\n• When: ${date} at ${time}\n• Where: ${a.location === "HOME_VISIT" ? "Home visit" + (a.addressLine ? ` — ${a.addressLine}` : "") : "At the clinic"}\n• Ref: ${a.id.slice(-8).toUpperCase()}\n\nReply to this message if you need to reschedule. See you then. 🌿`;
+
+  const message =
+    a.locale === "ar"
+      ? `السلام عليكم ${name}،\n\nنؤكد لكم موعدكم في مركز الشفاء للحجامة:\n\n• الخدمة: ${a.serviceNameAr}\n• الوقت: ${date} – ${time}\n• المكان: ${a.location === "HOME_VISIT" ? "زيارة منزلية" + (a.addressLine ? ` — ${a.addressLine}` : "") : "في العيادة"}\n• المرجع: ${ref}\n\nإذا احتجتم لإعادة الجدولة، فقط ردّوا على هذه الرسالة. نراكم قريبًا إن شاء الله. 🌿`
+      : `As-salamu alaykum ${name},\n\nThis confirms your appointment at Al-Shifa Hijama Center:\n\n• Service: ${a.serviceName}\n• When: ${date} at ${time}\n• Where: ${a.location === "HOME_VISIT" ? "Home visit" + (a.addressLine ? ` — ${a.addressLine}` : "") : "At the clinic"}\n• Ref: ${ref}\n\nReply to this message if you need to reschedule. See you then. 🌿`;
+
   return waLink(a.guestPhone, message);
 }
 

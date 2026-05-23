@@ -30,7 +30,7 @@ export type MessageCardData = {
 };
 
 const STATUS_BADGE: Record<Status, string> = {
-  NEW: "bg-gold/20 text-gold-foreground border border-gold/30",
+  NEW: "bg-gold/20 text-gold-foreground border border-gold/30 dark:text-gold",
   READ: "bg-muted text-foreground border border-border",
   REPLIED: "bg-primary/12 text-primary border border-primary/20",
   ARCHIVED: "bg-secondary text-muted-foreground border border-border",

@@ -92,7 +92,7 @@ export function AdminSidebar({
                       "rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
                       active
                         ? "bg-primary-foreground/20 text-primary-foreground"
-                        : "bg-gold/20 text-gold-foreground",
+                        : "bg-gold/20 text-gold-foreground dark:text-gold",
                     )}
                   >
                     {badge}

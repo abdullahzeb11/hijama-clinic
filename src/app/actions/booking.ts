@@ -63,6 +63,7 @@ export async function createAppointment(raw: unknown): Promise<Result> {
       durationMin: service.durationMinutes,
       priceSar: service.priceSar,
       location: input.location,
+      locale: input.locale,
       guestName: input.guestName,
       guestPhone: phone,
       guestEmail: input.guestEmail || null,

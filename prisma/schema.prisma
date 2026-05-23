@@ -144,6 +144,9 @@ model Appointment {
   location     AppointmentLocation @default(CLINIC)
   scheduledAt  DateTime
   durationMin  Int
+  // Locale the customer booked in — used to localize admin
+  // notifications (email, WhatsApp confirm) back to the customer.
+  locale       String              @default("ar")
   // Guest booking fallback (when not logged in)
   guestName    String?
   guestPhone   String?

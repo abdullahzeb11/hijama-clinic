@@ -62,6 +62,8 @@ export default async function AppointmentsPage({
     guestPhone: a.guestPhone,
     addressLine: a.addressLine,
     serviceName: a.service.nameEn,
+    serviceNameAr: a.service.nameAr,
+    locale: (a.locale === "en" ? "en" : "ar") as "ar" | "en",
   }));
 
   // Bucket by status when in kanban mode (filter=active is the kanban view).

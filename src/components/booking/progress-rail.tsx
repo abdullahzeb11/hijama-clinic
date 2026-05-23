@@ -27,7 +27,7 @@ export function ProgressRail({
                   done
                     ? "border-primary bg-primary text-primary-foreground"
                     : active
-                      ? "border-gold bg-gold/15 text-gold-foreground shadow-glow"
+                      ? "border-gold bg-gold/15 text-gold-foreground shadow-glow dark:text-gold"
                       : "border-border bg-card text-muted-foreground",
                 )}
               >
