@@ -301,6 +301,22 @@
       "backHome": "Back to home"
     }
   },
+  "Blog": {
+    "metaTitle": "Journal — Al-Shifa Hijama Center",
+    "metaDescription": "Reflections on hijama, prophetic medicine, pain management, and the everyday wellness practices of our patients.",
+    "eyebrow": "From our practice",
+    "title": "Notes from the clinic",
+    "subtitle": "Short, practical reads on prophetic cupping, recovery, and the quiet science behind a centuries-old therapy.",
+    "allCategories": "All",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "We're writing the first entries. Check back soon.",
+    "backToBlog": "Back to journal",
+    "by": "By",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "related": "More from the journal"
+  },
   "Account": {
     "login": {
       "title": "Sign in",

@@ -40,6 +40,7 @@ export const siteConfig = {
     { key: "sunnah", href: "#sunnah" },
     { key: "gallery", href: "#gallery" },
     { key: "testimonials", href: "#testimonials" },
+    { key: "blog", href: "/blog" },
     { key: "faq", href: "#faq" },
     { key: "contact", href: "#contact" },
   ] as const,

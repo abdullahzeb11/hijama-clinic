@@ -46,15 +46,25 @@ export function Navbar({ isSignedIn = false }: { isSignedIn?: boolean }) {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {siteConfig.nav.map((item) => (
-            <a
-              key={item.key}
-              href={item.href}
-              className="rounded-full px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              {t(item.key)}
-            </a>
-          ))}
+          {siteConfig.nav.map((item) =>
+            item.href.startsWith("/") ? (
+              <Link
+                key={item.key}
+                href={item.href}
+                className="rounded-full px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                {t(item.key)}
+              </Link>
+            ) : (
+              <a
+                key={item.key}
+                href={item.href}
+                className="rounded-full px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                {t(item.key)}
+              </a>
+            ),
+          )}
         </nav>
 
         <div className="flex items-center gap-1.5">
@@ -113,12 +123,21 @@ export function Navbar({ isSignedIn = false }: { isSignedIn?: boolean }) {
               <div className="mt-8 flex flex-col gap-1">
                 {siteConfig.nav.map((item) => (
                   <SheetClose asChild key={item.key}>
-                    <a
-                      href={item.href}
-                      className="rounded-xl px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-accent"
-                    >
-                      {t(item.key)}
-                    </a>
+                    {item.href.startsWith("/") ? (
+                      <Link
+                        href={item.href}
+                        className="rounded-xl px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-accent"
+                      >
+                        {t(item.key)}
+                      </Link>
+                    ) : (
+                      <a
+                        href={item.href}
+                        className="rounded-xl px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-accent"
+                      >
+                        {t(item.key)}
+                      </a>
+                    )}
                   </SheetClose>
                 ))}
               </div>

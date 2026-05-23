@@ -8,6 +8,7 @@ import {
   Users,
   Briefcase,
   Star,
+  FileText,
   LogOut,
   ExternalLink,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const NAV: NavItem[] = [
   { href: "/admin/appointments", label: "Appointments", icon: CalendarDays },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/services", label: "Services", icon: Briefcase },
+  { href: "/admin/posts", label: "Posts", icon: FileText },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
 ];
 
