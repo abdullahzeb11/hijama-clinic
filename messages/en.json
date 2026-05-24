@@ -108,11 +108,15 @@
     }
   },
   "Gallery": {
-    "eyebrow": "Before & after",
-    "title": "Real results from our patients",
-    "subtitle": "Drag the slider on each card to compare. Published with consent; individual outcomes may vary.",
-    "before": "Before",
-    "after": "After"
+    "eyebrow": "How we practice",
+    "title": "Four commitments behind every session",
+    "subtitle": "The principles we hold ourselves to — visible in every appointment, every patient, every day.",
+    "captions": {
+      "1": { "title": "The sunnah cadence", "detail": "17 · 19 · 21 Hijri" },
+      "2": { "title": "Sterile by ritual", "detail": "Single-use, every session" },
+      "3": { "title": "Total privacy", "detail": "Separate, calm rooms" },
+      "4": { "title": "We come to you", "detail": "Home visits across Riyadh" }
+    }
   },
   "Testimonials": {
     "eyebrow": "Patient stories",
