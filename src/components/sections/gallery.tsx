@@ -7,15 +7,16 @@ import { SectionHeader } from "./section";
 import { cn } from "@/lib/utils";
 
 /**
- * Before/after slider — the "before" side renders the brand gradient +
- * Islamic filigree (calm/preparation state). The "after" side reveals a
- * real cupping therapy photo. Visitors drag the handle to "see inside a
- * session". If a photo URL fails to load, the gradient shows on both sides
- * (graceful degradation).
+ * Real before/after slider — both sides show actual photos.
+ * Each card pairs a "before" (plain back/skin) with an "after" (cupping
+ * marks). Drag the handle to compare. Hue fallback gradients render only
+ * if a photo URL fails to load (graceful degradation).
  */
 const PAIRS = [
   {
     id: 1,
+    beforeUrl:
+      "https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=900&auto=format&fit=crop&q=60",
     afterUrl:
       "https://plus.unsplash.com/premium_photo-1712588406397-89e673061467?w=900&auto=format&fit=crop&q=60",
     hueA: "168 30% 18%",
@@ -23,6 +24,8 @@ const PAIRS = [
   },
   {
     id: 2,
+    beforeUrl:
+      "https://plus.unsplash.com/premium_photo-1681873742740-9a0e9eaa4584?w=900&auto=format&fit=crop&q=60",
     afterUrl:
       "https://plus.unsplash.com/premium_photo-1712588405834-4762fb74cea9?w=900&auto=format&fit=crop&q=60",
     hueA: "165 45% 22%",
@@ -30,6 +33,8 @@ const PAIRS = [
   },
   {
     id: 3,
+    beforeUrl:
+      "https://images.unsplash.com/photo-1657800187914-682b18440d50?w=900&auto=format&fit=crop&q=60",
     afterUrl:
       "https://plus.unsplash.com/premium_photo-1712592055520-852d0ef3e40f?w=900&auto=format&fit=crop&q=60",
     hueA: "168 28% 16%",
@@ -37,6 +42,8 @@ const PAIRS = [
   },
   {
     id: 4,
+    beforeUrl:
+      "https://plus.unsplash.com/premium_photo-1711610268817-2d6a57c2bcb7?w=900&auto=format&fit=crop&q=60",
     afterUrl:
       "https://plus.unsplash.com/premium_photo-1712592055468-f55ec9406afd?w=900&auto=format&fit=crop&q=60",
     hueA: "165 35% 20%",
@@ -60,6 +67,7 @@ export function Gallery() {
           {PAIRS.map((p, i) => (
             <BeforeAfterCard
               key={p.id}
+              beforeUrl={p.beforeUrl}
               afterUrl={p.afterUrl}
               hueA={p.hueA}
               hueB={p.hueB}
@@ -75,6 +83,7 @@ export function Gallery() {
 }
 
 function BeforeAfterCard({
+  beforeUrl,
   afterUrl,
   hueA,
   hueB,
@@ -82,6 +91,7 @@ function BeforeAfterCard({
   beforeLabel,
   afterLabel,
 }: {
+  beforeUrl: string;
   afterUrl: string;
   hueA: string;
   hueB: string;
@@ -90,6 +100,7 @@ function BeforeAfterCard({
   afterLabel: string;
 }) {
   const [pos, setPos] = React.useState(50);
+  const [beforeOk, setBeforeOk] = React.useState(Boolean(beforeUrl));
   const [afterOk, setAfterOk] = React.useState(Boolean(afterUrl));
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -136,7 +147,7 @@ function BeforeAfterCard({
           ) : null}
         </div>
 
-        {/* BEFORE overlay — branded gradient with arabesque, clipped by slider */}
+        {/* BEFORE overlay — real photo (with gradient fallback), clipped by slider */}
         <div
           className="absolute inset-0"
           style={{
@@ -144,7 +155,19 @@ function BeforeAfterCard({
             clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`,
           }}
         >
-          <CardFiligree variant="before" />
+          {beforeOk && beforeUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={beforeUrl}
+              alt=""
+              loading="lazy"
+              onError={() => setBeforeOk(false)}
+              className="absolute inset-0 h-full w-full object-cover"
+              draggable={false}
+            />
+          ) : (
+            <CardFiligree variant="before" />
+          )}
         </div>
 
         {/* Slider handle */}
