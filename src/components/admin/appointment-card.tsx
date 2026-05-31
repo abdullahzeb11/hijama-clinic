@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { updateAppointmentStatus } from "@/app/actions/admin";
 import { cn, waLink } from "@/lib/utils";
+import { buildWhatsAppConfirmMessage } from "@/lib/whatsapp-confirm-message";
 
 export type AppointmentCardData = {
   id: string;
@@ -184,85 +185,27 @@ export function AppointmentCard({ a }: { a: AppointmentCardData }) {
   );
 }
 
-/** Build a wa.me link with the full confirmation message pre-filled, in the
- *  language the customer booked in. */
+/** Build a wa.me link with the full confirmation message pre-filled,
+ *  using the shared message builder so the admin-card link and the
+ *  admin-email redirect produce identical text. */
 function buildWhatsAppConfirmLink(a: AppointmentCardData): string {
   if (!a.guestPhone) return "#";
 
-  const localeTag = a.locale === "ar" ? "ar-SA" : "en-SA";
-  const when = new Date(a.scheduledAt);
-  const date = new Intl.DateTimeFormat(localeTag, {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "Asia/Riyadh",
-  }).format(when);
-  const time = new Intl.DateTimeFormat(localeTag, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-    timeZone: "Asia/Riyadh",
-  }).format(when);
-  const ref = a.id.slice(-8).toUpperCase();
-  const name = a.guestName ?? "";
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
     "https://razan-hijama.vercel.app";
-  const bookingUrl = `${siteUrl}/${a.locale}/book/confirmed/${a.id}`;
-  const divider = "━━━━━━━━━━━━━━━";
 
-  const whereAr =
-    a.location === "HOME_VISIT"
-      ? "زيارة منزلية" + (a.addressLine ? ` — ${a.addressLine}` : "")
-      : "في العيادة";
-  const whereEn =
-    a.location === "HOME_VISIT"
-      ? "Home visit" + (a.addressLine ? ` — ${a.addressLine}` : "")
-      : "At the clinic";
-
-  const message =
-    a.locale === "ar"
-      ? `🌿 *مركز رزان للحجامة*
-${divider}
-
-السلام عليكم *${name}*،
-
-موعدك مؤكد ✅
-
-📋 *الخدمة:* ${a.serviceNameAr}
-📅 *التاريخ:* ${date}
-🕐 *الوقت:* ${time}
-📍 *المكان:* ${whereAr}
-🎫 *المرجع:* ${ref}
-
-${divider}
-
-عرض الحجز:
-${bookingUrl}
-
-ردّوا على هذه الرسالة إذا احتجتم لإعادة الجدولة.
-نراكم قريبًا إن شاء الله 🌿`
-      : `🌿 *Razan Hijama Center*
-${divider}
-
-As-salamu alaykum *${name}*,
-
-Your appointment is confirmed ✅
-
-📋 *Service:* ${a.serviceName}
-📅 *Date:* ${date}
-🕐 *Time:* ${time}
-📍 *Where:* ${whereEn}
-🎫 *Ref:* ${ref}
-
-${divider}
-
-View your booking:
-${bookingUrl}
-
-Reply to this message if you need to reschedule.
-See you then 🌿`;
+  const message = buildWhatsAppConfirmMessage({
+    locale: a.locale,
+    customerName: a.guestName ?? "",
+    serviceNameEn: a.serviceName,
+    serviceNameAr: a.serviceNameAr,
+    scheduledAt: new Date(a.scheduledAt),
+    location: a.location,
+    addressLine: a.addressLine,
+    appointmentId: a.id,
+    siteUrl,
+  });
 
   return waLink(a.guestPhone, message);
 }
