@@ -305,19 +305,19 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
-// ─── Phone OTP (customer auth) ─────────────────────────────────────────────
+// ─── Email OTP (customer auth) ─────────────────────────────────────────────
 //
-// Codes are stored hashed (bcrypt). Each phone may have one active code at a
+// Codes are stored hashed (bcrypt). Each email may have one active code at a
 // time — we overwrite on resend. Attempts are bounded to mitigate brute force.
 
 model OneTimeCode {
   id         String   @id @default(cuid())
-  phone      String   @unique
+  email      String   @unique
   codeHash   String
   expiresAt  DateTime
   attempts   Int      @default(0)
   consumedAt DateTime?
   createdAt  DateTime @default(now())
 
-  @@index([phone, expiresAt])
+  @@index([email, expiresAt])
 }

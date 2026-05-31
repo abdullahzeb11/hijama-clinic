@@ -13,17 +13,19 @@ export function ProfileCard({
 }) {
   const t = useTranslations("Account.profile");
   const [name, setName] = React.useState(initial.name);
-  const [email, setEmail] = React.useState(initial.email);
+  const [phone, setPhone] = React.useState(initial.phone);
   const [city, setCity] = React.useState(initial.city);
   const [pending, startTransition] = React.useTransition();
   const [savedAt, setSavedAt] = React.useState<number | null>(null);
 
   const dirty =
-    name !== initial.name || email !== initial.email || city !== initial.city;
+    name !== initial.name ||
+    phone !== initial.phone ||
+    city !== initial.city;
 
   function save() {
     startTransition(async () => {
-      await updateProfile({ name, email, city });
+      await updateProfile({ name, phone, city });
       setSavedAt(Date.now());
     });
   }
@@ -65,20 +67,21 @@ export function ProfileCard({
           autoComplete="name"
         />
         <Field
-          label={t("phone")}
-          value={initial.phone}
+          label={t("email")}
+          value={initial.email}
           onChange={() => {}}
           readOnly
           dir="ltr"
-          hint={t("phoneLocked")}
+          type="email"
+          hint={t("emailLocked")}
         />
         <Field
-          label={t("email")}
-          value={email}
-          onChange={setEmail}
-          type="email"
+          label={t("phone")}
+          value={phone}
+          onChange={setPhone}
+          type="tel"
           dir="ltr"
-          autoComplete="email"
+          autoComplete="tel"
         />
         <Field
           label={t("city")}

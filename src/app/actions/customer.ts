@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { requestOtp as requestOtpLib } from "@/lib/otp";
-import { SLOT_CAPACITY, normalizePhone } from "@/lib/booking";
+import { SLOT_CAPACITY } from "@/lib/booking";
 
 async function requireCustomer() {
   const session = await auth();
@@ -15,12 +15,12 @@ async function requireCustomer() {
 
 /* ─── OTP request (no session required) ──────────────────────────────── */
 
-const phoneSchema = z.object({ phone: z.string().min(8).max(20) });
+const emailRequestSchema = z.object({ email: z.string().email().max(254) });
 
-export async function requestOtp(input: z.infer<typeof phoneSchema>) {
-  const parsed = phoneSchema.safeParse(input);
-  if (!parsed.success) return { ok: false as const, error: "Invalid phone" };
-  const res = await requestOtpLib(parsed.data.phone);
+export async function requestOtp(input: z.infer<typeof emailRequestSchema>) {
+  const parsed = emailRequestSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: "Invalid email" };
+  const res = await requestOtpLib(parsed.data.email);
   // Surface dev-only code so the login UI can hint where to look.
   return res.devCode
     ? { ok: true as const, devCode: res.devCode }
@@ -93,7 +93,7 @@ export async function rescheduleMyAppointment(input: z.infer<typeof rescheduleSc
 
 const profileSchema = z.object({
   name: z.string().trim().min(2).max(80).optional(),
-  email: z.string().trim().email().optional().or(z.literal("")),
+  phone: z.string().trim().max(20).optional().or(z.literal("")),
   city: z.string().trim().max(80).optional(),
 });
 
@@ -106,7 +106,7 @@ export async function updateProfile(input: z.infer<typeof profileSchema>) {
     where: { id: user.id },
     data: {
       name: parsed.data.name ?? undefined,
-      email: parsed.data.email ? parsed.data.email.toLowerCase() : null,
+      phone: parsed.data.phone ? parsed.data.phone : null,
       city: parsed.data.city ?? undefined,
     },
   });

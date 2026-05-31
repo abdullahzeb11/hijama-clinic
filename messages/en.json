@@ -341,16 +341,16 @@
   "Account": {
     "login": {
       "title": "Sign in",
-      "subtitle": "We'll sign you in with a code sent to your WhatsApp.",
+      "subtitle": "We'll email you a 6-digit code to sign you in.",
       "heroEyebrow": "Patient account",
       "heroTitle": "Your healing journey, in your pocket.",
       "heroBody": "Track upcoming sessions, reschedule with one tap, and keep your details ready for every booking — from any device.",
-      "phone": "Mobile number",
+      "email": "Email address",
       "sendCode": "Send code",
       "sending": "Sending…",
-      "invalidPhone": "That phone number doesn't look right.",
-      "changeNumber": "Change number",
-      "sentTo": "Code sent to {phone}",
+      "invalidEmail": "That email doesn't look right.",
+      "changeEmail": "Change email",
+      "sentTo": "Code sent to {email}",
       "code": "Verification code",
       "verify": "Verify & sign in",
       "verifying": "Verifying…",
@@ -406,8 +406,8 @@
       "saved": "Saved",
       "name": "Name",
       "phone": "Mobile",
-      "phoneLocked": "Locked — this is your sign-in",
       "email": "Email",
+      "emailLocked": "Locked — this is your sign-in",
       "city": "City"
     }
   }

@@ -15,15 +15,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { requestOtp, seedNameIfMissing } from "@/app/actions/customer";
 
-type Step = "phone" | "otp" | "name";
+type Step = "email" | "otp" | "name";
 
 export function LoginForm({ next }: { next?: string }) {
   const t = useTranslations("Account.login");
   const router = useRouter();
   const locale = useLocale() as "ar" | "en";
 
-  const [step, setStep] = React.useState<Step>("phone");
-  const [phone, setPhone] = React.useState("");
+  const [step, setStep] = React.useState<Step>("email");
+  const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
   const [name, setName] = React.useState("");
   const [pending, setPending] = React.useState(false);
@@ -41,10 +41,10 @@ export function LoginForm({ next }: { next?: string }) {
     e?.preventDefault();
     setError(null);
     setPending(true);
-    const res = await requestOtp({ phone });
+    const res = await requestOtp({ email });
     setPending(false);
     if (!res.ok) {
-      setError(t("invalidPhone"));
+      setError(t("invalidEmail"));
       return;
     }
     setStep("otp");
@@ -56,8 +56,8 @@ export function LoginForm({ next }: { next?: string }) {
     e.preventDefault();
     setError(null);
     setPending(true);
-    const res = await signIn("phone-otp", {
-      phone,
+    const res = await signIn("email-otp", {
+      email,
       code,
       redirect: false,
     });
@@ -95,21 +95,21 @@ export function LoginForm({ next }: { next?: string }) {
     router.refresh();
   }
 
-  if (step === "phone") {
+  if (step === "email") {
     return (
       <form onSubmit={onRequestOtp} className="mt-8 space-y-4">
         <label className="block">
           <span className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            {t("phone")}
+            {t("email")}
           </span>
           <input
-            type="tel"
+            type="email"
             required
-            autoComplete="tel"
+            autoComplete="email"
             dir="ltr"
-            placeholder="+966 5X XXX XXXX"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="block w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </label>
@@ -187,7 +187,7 @@ export function LoginForm({ next }: { next?: string }) {
       <button
         type="button"
         onClick={() => {
-          setStep("phone");
+          setStep("email");
           setCode("");
           setError(null);
           setDevCode(null);
@@ -195,11 +195,11 @@ export function LoginForm({ next }: { next?: string }) {
         className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-3.5 w-3.5 rtl:rotate-180" />
-        {t("changeNumber")}
+        {t("changeEmail")}
       </button>
 
       <p className="text-sm text-muted-foreground">
-        {t("sentTo", { phone })}
+        {t("sentTo", { email })}
       </p>
 
       {devCode ? (

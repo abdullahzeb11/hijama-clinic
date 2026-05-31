@@ -11,8 +11,8 @@ const credentialsSchema = z.object({
   password: z.string().min(6),
 });
 
-const phoneOtpSchema = z.object({
-  phone: z.string().min(8),
+const emailOtpSchema = z.object({
+  email: z.string().email(),
   code: z.string().regex(/^\d{4,8}$/),
 });
 
@@ -58,19 +58,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
 
-    /* Customers: phone + OTP. */
+    /* Customers: email + OTP. */
     Credentials({
-      id: "phone-otp",
-      name: "Phone OTP",
+      id: "email-otp",
+      name: "Email OTP",
       credentials: {
-        phone: { label: "Phone", type: "tel" },
+        email: { label: "Email", type: "email" },
         code: { label: "Code", type: "text" },
       },
       async authorize(raw) {
-        const parsed = phoneOtpSchema.safeParse(raw);
+        const parsed = emailOtpSchema.safeParse(raw);
         if (!parsed.success) return null;
 
-        const res = await verifyOtp(parsed.data.phone, parsed.data.code);
+        const res = await verifyOtp(parsed.data.email, parsed.data.code);
         if (!res.ok) return null;
 
         const user = await prisma.user.findUnique({
@@ -81,7 +81,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         return {
           id: user.id,
-          name: user.name ?? user.phone ?? "Customer",
+          name: user.name ?? user.email ?? "Customer",
           email: user.email,
           image: user.image,
           role: user.role,
